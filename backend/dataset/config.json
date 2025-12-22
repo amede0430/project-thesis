@@ -1,0 +1,106 @@
+{
+  "simulation": {
+    "interval_seconds": 5,
+    "segment_duration_seconds": 5,
+    "csv_duration_seconds": 30,
+    "segments_per_file": 6
+  },
+  "dataset_paths": {
+    "branched": {
+      "normal": "../../Accelerometer/Branched/No-leak/",
+      "gasket_leak": "../../Accelerometer/Branched/Gasket Leak/",
+      "circumferential_crack": "../../Accelerometer/Branched/Circumferential Crack/",
+      "longitudinal_crack": "../../Accelerometer/Branched/Longitudinal Crack/",
+      "orifice_leak": "../../Accelerometer/Branched/Orifice Leak/"
+    },
+    "looped": {
+      "normal": "../../Accelerometer/Looped/No-leak/",
+      "gasket_leak": "../../Accelerometer/Looped/Gasket Leak/",
+      "circumferential_crack": "../../Accelerometer/Looped/Circumferential Crack/",
+      "longitudinal_crack": "../../Accelerometer/Looped/Longitudinal Crack/",
+      "orifice_leak": "../../Accelerometer/Looped/Orifice Leak/"
+    }
+  },
+  "sensor_assignments": {
+    "1": {
+      "network_type": "branched",
+      "normal_files": ["BR_NL_0.18 LPS_A1.csv", "BR_NL_0.47 LPS_A1.csv", "BR_NL_ND_A1.csv"],
+      "leak_files": ["BR_GL_0.18 LPS_A1.csv", "BR_GL_0.47 LPS_A1.csv", "BR_GL_ND_A1.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "2": {
+      "network_type": "branched", 
+      "normal_files": ["BR_NL_0.18 LPS_A2.csv", "BR_NL_0.47 LPS_A2.csv", "BR_NL_ND_A2.csv"],
+      "leak_files": ["BR_GL_0.18 LPS_A2.csv", "BR_GL_0.47 LPS_A2.csv", "BR_GL_ND_A2.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "3": {
+      "network_type": "looped",
+      "normal_files": ["LP_NL_0.18 LPS_A1.csv", "LP_NL_0.47 LPS_A1.csv", "LP_NL_ND_A1.csv"],
+      "leak_files": ["LP_GL_0.18 LPS_A1.csv", "LP_GL_0.47 LPS_A1.csv", "LP_GL_ND_A1.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "4": {
+      "network_type": "looped",
+      "normal_files": ["LP_NL_0.18 LPS_A2.csv", "LP_NL_0.47 LPS_A2.csv", "LP_NL_ND_A2.csv"],
+      "leak_files": ["LP_GL_0.18 LPS_A2.csv", "LP_GL_0.47 LPS_A2.csv", "LP_GL_ND_A2.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "5": {
+      "network_type": "branched",
+      "normal_files": ["BR_NL_Transient_A1.csv", "BR_NL_0.18 LPS_A1.csv"],
+      "leak_files": ["BR_GL_Transient_A1.csv", "BR_GL_0.18 LPS_A1.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "6": {
+      "network_type": "branched",
+      "normal_files": ["BR_NL_Transient_A2.csv", "BR_NL_0.18 LPS_A2.csv"],
+      "leak_files": ["BR_GL_Transient_A2.csv", "BR_GL_0.18 LPS_A2.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "7": {
+      "network_type": "looped",
+      "normal_files": ["LP_NL_Transient_A1.csv", "LP_NL_0.18 LPS_A1.csv"],
+      "leak_files": ["LP_GL_Transient_A1.csv", "LP_GL_0.18 LPS_A1.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "8": {
+      "network_type": "looped",
+      "normal_files": ["LP_NL_Transient_A2.csv", "LP_NL_0.18 LPS_A2.csv"],
+      "leak_files": ["LP_GL_Transient_A2.csv", "LP_GL_0.18 LPS_A2.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "9": {
+      "network_type": "branched",
+      "normal_files": ["BR_NL_0.47 LPS_A1.csv", "BR_NL_ND_A1.csv"],
+      "leak_files": ["BR_GL_0.47 LPS_A1.csv", "BR_GL_ND_A1.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    },
+    "10": {
+      "network_type": "branched",
+      "normal_files": ["BR_NL_0.47 LPS_A2.csv", "BR_NL_ND_A2.csv"],
+      "leak_files": ["BR_GL_0.47 LPS_A2.csv", "BR_GL_ND_A2.csv"],
+      "current_file": null,
+      "current_segment": 0,
+      "leak_mode": false
+    }
+  }
+}

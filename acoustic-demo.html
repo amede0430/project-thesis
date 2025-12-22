@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Acoustique - ThingSpeak</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #6b7280;
+        }
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .stat-card.x { background: #fef2f2; }
+        .stat-card.y { background: #eff6ff; }
+        .stat-card.z { background: #f0fdf4; }
+        .stat-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .stat-card.x .stat-label { color: #dc2626; }
+        .stat-card.y .stat-label { color: #2563eb; }
+        .stat-card.z .stat-label { color: #16a34a; }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Signal Acoustique</h1>
+            <p class="subtitle">Données en temps réel des capteurs via ThingSpeak</p>
+        </div>
+
+        <div id="error-container"></div>
+
+        <div class="chart-container">
+            <div class="controls">
+                <div class="info">
+                    <span id="sample-count">0 échantillons</span>
+                </div>
+                <button id="refresh-btn" onclick="fetchData()">Actualiser</button>
+            </div>
+            
+            <canvas id="acousticChart"></canvas>
+
+            <div class="stats">
+                <div class="stat-card x">
+                    <div class="stat-label">Acc X</div>
+                    <div class="stat-value" id="stat-x">-</div>
+                </div>
+                <div class="stat-card y">
+                    <div class="stat-label">Acc Y</div>
+                    <div class="stat-value" id="stat-y">-</div>
+                </div>
+                <div class="stat-card z">
+                    <div class="stat-label">Acc Z</div>
+                    <div class="stat-value" id="stat-z">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CHANNEL_ID = '3210058';
+        const API_KEY = 'COOLQGZFSE397158';
+        const MAX_RESULTS = 40;
+
+        let chart = null;
+
+        function showError(message) {
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        function clearError() {
+            document.getElementById('error-container').innerHTML = '';
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        async function fetchData() {
+            const btn = document.getElementById('refresh-btn');
+            btn.disabled = true;
+            btn.textContent = 'Actualisation...';
+            clearError();
+
+            try {
+                const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${API_KEY}&results=${MAX_RESULTS}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`Erreur API: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const feeds = data.feeds.filter(f => f.field1 && f.field2 && f.field3);
+
+                if (feeds.length === 0) {
+                    showError('Aucune donnée disponible');
+                    return;
+                }
+
+                const chartData = {
+                    labels: feeds.map(f => formatTime(f.created_at)),
+                    datasets: [
+                        {
+                            label: 'Acc X',
+                            data: feeds.map(f => parseFloat(f.field1)),
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4,
+                            borderWidth: 2,
+                        },
+                        {
+                            label: 'Acc Y',
+                            data: feeds.map(f => parseFloat(f.field2)),
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            borderWidth: 2,
+                        },
+                        {
+                            label: 'Acc Z',
+                            data: feeds.map(f => parseFloat(f.field3)),
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            borderWidth: 2,
+                        }
+                    ]
+                };
+
+                if (chart) {
+                    chart.data = chartData;
+                    chart.update();
+                } else {
+                    const ctx = document.getElementById('acousticChart').getContext('2d');
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            aspectRatio: 2.5,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false,
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    display: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Temps'
+                                    },
+                                    ticks: {
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    }
+                                },
+                                y: {
+                                    display: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Accélération'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Update stats
+                const latest = feeds[feeds.length - 1];
+                document.getElementById('stat-x').textContent = parseFloat(latest.field1).toFixed(3);
+                document.getElementById('stat-y').textContent = parseFloat(latest.field2).toFixed(3);
+                document.getElementById('stat-z').textContent = parseFloat(latest.field3).toFixed(3);
+                document.getElementById('sample-count').textContent = `${feeds.length} échantillons`;
+
+            } catch (error) {
+                showError(`Erreur: ${error.message}`);
+                console.error('Error fetching data:', error);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Actualiser';
+            }
+        }
+
+        // Initial load
+        fetchData();
+
+        // Auto-refresh every 15 seconds
+        setInterval(fetchData, 15000);
+    </script>
+</body>
+</html>
