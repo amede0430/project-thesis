@@ -16,6 +16,7 @@ from .api.monitoring import router as monitoring_router
 from .api.history import router as history_router
 from .api.ttn_integration import router as ttn_router
 from .api.vibration_analysis import router as vibration_router
+from .api.ml_prediction import router as ml_router
 from .models import user, sensor, alert, activity, report, sensor_data, analysis_history
 import asyncio
 
@@ -63,6 +64,7 @@ app.include_router(monitoring_router, tags=["monitoring"])
 app.include_router(history_router, tags=["history"])
 app.include_router(ttn_router, prefix="/ttn", tags=["ttn"])
 app.include_router(vibration_router, tags=["vibration"])
+app.include_router(ml_router, tags=["ml"])
 
 @app.get("/")
 async def root():

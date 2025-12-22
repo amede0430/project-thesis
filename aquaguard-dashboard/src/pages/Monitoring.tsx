@@ -5,6 +5,7 @@ import { useWebSocket } from '../hooks/useWebSocket';
 import AcousticSignalChart from '../components/charts/AcousticSignalChart';
 import VibrationSignalChart from '../components/charts/VibrationSignalChart';
 import VibrationSpectrogramChart from '../components/charts/VibrationSpectrogramChart';
+import MLPredictionDisplay from '../components/ml/MLPredictionDisplay';
 
 export default function Monitoring() {
   const [signalData, setSignalData] = useState<number[]>([]);
@@ -193,60 +194,12 @@ export default function Monitoring() {
           <div className="bg-dark-tertiary rounded-lg p-6">
             <h3 className="text-lg font-semibold text-white/95 mb-4">Résultat de l'Analyse IA</h3>
             
-            {analysisResult ? (
-              <div className="grid grid-cols-3 gap-6">
-                {/* Statut principal */}
-                <div className="bg-dark-quaternary rounded-lg p-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    {getStatusIcon(analysisResult.status)}
-                    <div>
-                      <div className="text-sm font-semibold text-white/95">
-                        {analysisResult.status === 'normal' ? 'Normal' : 
-                         analysisResult.status === 'anomaly' ? 'Anomalie Détectée' : 
-                         'Attention Requise'}
-                      </div>
-                      <div className="text-xs text-white/65">
-                        Confiance: {Math.round((analysisResult.confidence || 0) * 100)}%
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Métriques */}
-                <div className="bg-dark-quaternary rounded-lg p-4">
-                  <div className="text-sm font-semibold text-white/95 mb-3">Métriques</div>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-white/65">RMS:</span>
-                      <span className="text-white/95">{analysisResult.rms?.toFixed(3) || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/65">Peak:</span>
-                      <span className="text-white/95">{analysisResult.peak?.toFixed(3) || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/65">Fréquence:</span>
-                      <span className="text-white/95">{analysisResult.frequency?.toFixed(1) || 'N/A'} Hz</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Timestamp */}
-                <div className="bg-dark-quaternary rounded-lg p-4">
-                  <div className="text-sm font-semibold text-white/95 mb-3">Dernière Analyse</div>
-                  <div className="text-xs text-white/65">
-                    {analysisResult.timestamp ? 
-                      new Date(analysisResult.timestamp).toLocaleString('fr-FR') : 
-                      'En attente...'}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-white/55">
-                <Activity className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <div>En attente des données d'analyse...</div>
-              </div>
-            )}
+            <MLPredictionDisplay
+              autoRefresh={true}
+              refreshInterval={15000}
+              maxResults={200}
+              darkMode={true}
+            />
           </div>
         </main>
       </div>
