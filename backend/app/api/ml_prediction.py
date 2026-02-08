@@ -91,23 +91,46 @@ async def predict_leak(request: MLPredictionRequest):
         if len(request.data) < 16:
             raise HTTPException(status_code=400, detail="Pas assez de données (minimum 16 points)")
         
+        print("\n" + "="*80)
+        print("🔍 NOUVELLE ANALYSE ML - PRÉDICTION DE FUITE")
+        print("="*80)
+        
         # Convertir les données en arrays numpy
         acc_x = np.array([point.accX for point in request.data])
         acc_y = np.array([point.accY for point in request.data])
         acc_z = np.array([point.accZ for point in request.data])
         
+        print(f"📊 Données reçues:")
+        print(f"   - Nombre de points: {len(request.data)}")
+        print(f"   - Fréquence d'échantillonnage: {request.sampling_rate} Hz")
+        print(f"   - Plage AccX: [{acc_x.min():.3f}, {acc_x.max():.3f}]")
+        print(f"   - Plage AccY: [{acc_y.min():.3f}, {acc_y.max():.3f}]")
+        print(f"   - Plage AccZ: [{acc_z.min():.3f}, {acc_z.max():.3f}]")
+        
         # Calculer le signal vibratoire
         vibration_signal = calculate_vibration_signal(acc_x, acc_y, acc_z)
+        print(f"\n📈 Signal vibratoire:")
+        print(f"   - Amplitude moyenne: {np.mean(vibration_signal):.3f}")
+        print(f"   - Amplitude max: {np.max(vibration_signal):.3f}")
+        print(f"   - Écart-type: {np.std(vibration_signal):.3f}")
         
         # Créer le spectrogramme 224x224
         spectrogram_grayscale, spectrogram_base64 = create_spectrogram_224x224(vibration_signal, request.sampling_rate)
+        print(f"\n🖼️  Spectrogramme généré: 224x224 pixels")
         
         # Préparer l'input pour le modèle (normaliser entre 0 et 1)
         model_input = spectrogram_grayscale.astype(np.float32) / 255.0
         model_input = np.expand_dims(model_input, axis=0)  # Ajouter batch dimension -> (1, 224, 224, 1)
         
+        print(f"\n🤖 Exécution du modèle ML...")
+        print(f"   - Shape de l'input: {model_input.shape}")
+        print(f"   - Min/Max de l'input: [{model_input.min():.3f}, {model_input.max():.3f}]")
+        print(f"   - Moyenne de l'input: {model_input.mean():.3f}")
+        
         # Faire la prédiction
         predictions = model.predict(model_input, verbose=0)
+        print(f"   - Shape de la sortie: {predictions.shape}")
+        print(f"   - Valeur brute de sortie: {predictions[0]}")
         
         # Le modèle peut avoir différentes sorties
         # Cas 1: Sortie binaire avec sigmoid (1 neurone) -> predictions shape: (1, 1)
@@ -118,8 +141,12 @@ async def predict_leak(request: MLPredictionRequest):
             prob_fuite = float(predictions[0][0])
             prob_normal = 1.0 - prob_fuite
             
+            # AJUSTEMENT: Le modèle a un biais fort vers "Fuite"
+            # On utilise un seuil plus élevé pour compenser
+            THRESHOLD = 0.95  # Au lieu de 0.5
+            
             # Déterminer la classe prédite
-            if prob_fuite > 0.5:
+            if prob_fuite > THRESHOLD:
                 predicted_class = "Fuite"
                 confidence = prob_fuite
             else:
@@ -130,6 +157,12 @@ async def predict_leak(request: MLPredictionRequest):
                 "Normal": prob_normal,
                 "Fuite": prob_fuite
             }
+            
+            print(f"\n✅ RÉSULTAT DE LA PRÉDICTION (Binaire):")
+            print(f"   - Prédiction: {predicted_class}")
+            print(f"   - Confiance: {confidence*100:.2f}%")
+            print(f"   - Probabilité Normal: {prob_normal*100:.2f}%")
+            print(f"   - Probabilité Fuite: {prob_fuite*100:.2f}%")
         else:
             # Sortie multi-classe (softmax)
             classes = ["Normal", "Fuite"]  # Ajuster selon vos classes
@@ -139,6 +172,15 @@ async def predict_leak(request: MLPredictionRequest):
             
             # Créer le dictionnaire des probabilités
             probabilities = {classes[i]: float(predictions[0][i]) for i in range(min(len(classes), predictions.shape[1]))}
+            
+            print(f"\n✅ RÉSULTAT DE LA PRÉDICTION (Multi-classe):")
+            print(f"   - Prédiction: {predicted_class}")
+            print(f"   - Confiance: {confidence*100:.2f}%")
+            print(f"   - Probabilités:")
+            for class_name, prob in probabilities.items():
+                print(f"     • {class_name}: {prob*100:.2f}%")
+        
+        print("="*80 + "\n")
         
         return MLPredictionResponse(
             prediction=predicted_class,
