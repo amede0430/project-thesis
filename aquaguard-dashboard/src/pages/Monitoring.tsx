@@ -132,25 +132,25 @@ export default function Monitoring() {
   };
 
   return (
-    <div className="min-h-screen bg-dark-secondary font-inter">
+    <div className="min-h-screen bg-light-secondary font-inter">
       <Header />
       
-      <div className="bg-dark-secondary flex w-full min-h-[856px]">
+      <div className="bg-light-secondary flex w-full min-h-[856px]">
         <main className="flex-1 overflow-x-hidden flex flex-col p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-2xl font-semibold text-white/95">Monitoring Temps Réel</h1>
-              <p className="text-sm text-white/65 mt-1">Capteur AQG-SAK-001 • Analyse acoustique en direct</p>
+              <h1 className="text-2xl font-semibold text-gray-900">Monitoring Temps Réel</h1>
+              <p className="text-sm text-gray-600 mt-1">Capteur AQG-SAK-001 • Analyse acoustique en direct</p>
             </div>
             <div className="flex items-center gap-3">
               <div className={`flex items-center gap-2 px-3 py-1 rounded-sm text-sm ${
-                isConnected ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                isConnected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
               }`}>
                 <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
                 {isConnected ? 'Connecté' : 'Déconnecté'}
               </div>
-              <div className="text-sm flex items-center gap-2 text-white/55">
+              <div className="text-sm flex items-center gap-2 text-gray-500">
                 <Clock className="w-4 h-4" />
                 <span>Temps réel</span>
               </div>
@@ -158,47 +158,47 @@ export default function Monitoring() {
           </div>
 
           {/* Signal Acoustique - Pleine largeur */}
-          <div className="bg-dark-tertiary rounded-lg p-4 mb-6">
+          <div className="bg-white rounded-lg p-4 mb-6 shadow-sm border border-gray-200">
             <AcousticSignalChart 
               autoRefresh={true}
               refreshInterval={15000}
               maxResults={40}
-              darkMode={true}
+              darkMode={false}
             />
           </div>
 
           {/* Grille 2 colonnes - Signal Vibratoire et Spectrogramme */}
           <div className="grid grid-cols-2 gap-6 mb-6">
             {/* Signal Vibratoire */}
-            <div className="bg-dark-tertiary rounded-lg p-4">
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
               <VibrationSignalChart
                 autoRefresh={true}
                 refreshInterval={15000}
                 maxResults={40}
-                darkMode={true}
+                darkMode={false}
               />
             </div>
 
             {/* Spectrogramme */}
-            <div className="bg-dark-tertiary rounded-lg p-4">
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
               <VibrationSpectrogramChart
                 autoRefresh={true}
                 refreshInterval={15000}
                 maxResults={200}
-                darkMode={true}
+                darkMode={false}
               />
             </div>
           </div>
 
           {/* Résultat de l'analyse */}
-          <div className="bg-dark-tertiary rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white/95 mb-4">Résultat de l'Analyse IA</h3>
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Résultat de l'Analyse IA</h3>
             
             <MLPredictionDisplay
               autoRefresh={true}
               refreshInterval={15000}
               maxResults={200}
-              darkMode={true}
+              darkMode={false}
             />
           </div>
         </main>

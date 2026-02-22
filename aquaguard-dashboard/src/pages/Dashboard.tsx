@@ -53,28 +53,28 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-secondary">
+      <div className="min-h-screen bg-light-secondary">
         <Header />
         <div className="flex items-center justify-center h-64">
-          <div className="text-white/75">Chargement du dashboard...</div>
+          <div className="text-gray-600">Chargement du dashboard...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-dark-secondary font-inter">
+    <div className="min-h-screen bg-light-secondary font-inter">
       <Header />
       
-      <div className="bg-dark-secondary flex w-full min-h-[856px]">
+      <div className="bg-light-secondary flex w-full min-h-[856px]">
         <main className="flex-1 overflow-x-hidden flex flex-col p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-2xl font-semibold text-white/95">Surveillance Sakété</h1>
-              <p className="text-sm text-white/65 mt-1">Capteur AQG-SAK-001 • Site de Sakété, Bénin</p>
+              <h1 className="text-2xl font-semibold text-gray-900">Surveillance Sakété</h1>
+              <p className="text-sm text-gray-600 mt-1">Capteur AQG-SAK-001 • Site de Sakété, Bénin</p>
             </div>
-            <div className="text-sm flex items-center gap-2 text-white/55">
+            <div className="text-sm flex items-center gap-2 text-gray-500">
               <Clock className="w-4 h-4" />
               <span>Mis à jour il y a 2 min</span>
             </div>

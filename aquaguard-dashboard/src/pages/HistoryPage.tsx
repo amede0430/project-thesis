@@ -62,30 +62,30 @@ export default function HistoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-secondary">
+      <div className="min-h-screen bg-light-secondary">
         <Header />
         <div className="p-6 flex justify-center items-center">
-          <div className="text-white/75">Chargement de l'historique...</div>
+          <div className="text-gray-600">Chargement de l'historique...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-dark-secondary">
+    <div className="min-h-screen bg-light-secondary">
       <Header />
       
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white/95">Historique des Analyses</h1>
-            <p className="text-sm text-white/65 mt-1">Analyses IA significatives du capteur AQG-SAK-001</p>
+            <h1 className="text-2xl font-semibold text-gray-900">Historique des Analyses</h1>
+            <p className="text-sm text-gray-600 mt-1">Analyses IA significatives du capteur AQG-SAK-001</p>
           </div>
           <div className="flex items-center gap-4">
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value)}
-              className="px-3 py-2 bg-dark-tertiary border border-white/10 rounded-sm text-white/95 focus:border-aqua-primary focus:outline-none"
+              className="px-3 py-2 bg-white border border-gray-300 rounded-sm text-gray-900 focus:border-aqua-primary focus:outline-none focus:ring-1 focus:ring-aqua-primary"
             >
               <option value="7">7 derniers jours</option>
               <option value="30">30 derniers jours</option>
@@ -94,14 +94,14 @@ export default function HistoryPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 bg-dark-tertiary border border-white/10 rounded-sm text-white/95 focus:border-aqua-primary focus:outline-none"
+              className="px-3 py-2 bg-white border border-gray-300 rounded-sm text-gray-900 focus:border-aqua-primary focus:outline-none focus:ring-1 focus:ring-aqua-primary"
             >
               <option value="all">Tous les statuts</option>
               <option value="normal">Normal</option>
               <option value="warning">Attention</option>
               <option value="anomaly">Anomalie</option>
             </select>
-            <button className="flex items-center gap-2 px-4 py-2 bg-aqua-primary hover:bg-aqua-secondary text-black/85 font-medium rounded-sm">
+            <button className="flex items-center gap-2 px-4 py-2 bg-aqua-primary hover:bg-aqua-dark text-white font-medium rounded-sm">
               <Download className="w-4 h-4" />
               Exporter
             </button>
@@ -111,39 +111,39 @@ export default function HistoryPage() {
         {/* Statistiques */}
         {statistics && (
           <div className="grid grid-cols-4 gap-6 mb-8">
-            <div className="bg-dark-tertiary p-4 rounded-lg">
-              <div className="text-sm text-white/75 mb-2">Total Analyses</div>
-              <div className="text-2xl font-semibold text-white/95">{statistics.total_analyses}</div>
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="text-sm text-gray-600 mb-2">Total Analyses</div>
+              <div className="text-2xl font-semibold text-gray-900">{statistics.total_analyses}</div>
             </div>
-            <div className="bg-dark-tertiary p-4 rounded-lg">
-              <div className="text-sm text-white/75 mb-2">Normales</div>
-              <div className="text-2xl font-semibold text-green-500">{statistics.normal_count}</div>
-              <div className="text-xs text-white/55">{statistics.normal_percentage.toFixed(1)}%</div>
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="text-sm text-gray-600 mb-2">Normales</div>
+              <div className="text-2xl font-semibold text-green-600">{statistics.normal_count}</div>
+              <div className="text-xs text-gray-500">{statistics.normal_percentage.toFixed(1)}%</div>
             </div>
-            <div className="bg-dark-tertiary p-4 rounded-lg">
-              <div className="text-sm text-white/75 mb-2">Attention</div>
-              <div className="text-2xl font-semibold text-yellow-500">{statistics.warning_count}</div>
-              <div className="text-xs text-white/55">{statistics.warning_percentage.toFixed(1)}%</div>
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="text-sm text-gray-600 mb-2">Attention</div>
+              <div className="text-2xl font-semibold text-yellow-600">{statistics.warning_count}</div>
+              <div className="text-xs text-gray-500">{statistics.warning_percentage.toFixed(1)}%</div>
             </div>
-            <div className="bg-dark-tertiary p-4 rounded-lg">
-              <div className="text-sm text-white/75 mb-2">Anomalies</div>
-              <div className="text-2xl font-semibold text-red-500">{statistics.anomaly_count}</div>
-              <div className="text-xs text-white/55">{statistics.anomaly_percentage.toFixed(1)}%</div>
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="text-sm text-gray-600 mb-2">Anomalies</div>
+              <div className="text-2xl font-semibold text-red-600">{statistics.anomaly_count}</div>
+              <div className="text-xs text-gray-500">{statistics.anomaly_percentage.toFixed(1)}%</div>
             </div>
           </div>
         )}
 
         {/* Liste des analyses */}
-        <div className="bg-dark-tertiary rounded-lg">
-          <div className="p-4 border-b border-white/10">
-            <h2 className="text-lg font-semibold text-white/95">Analyses Enregistrées</h2>
-            <p className="text-sm text-white/65">Analyses avec confiance &gt; 80% et sévérité &gt; 70%</p>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">Analyses Enregistrées</h2>
+            <p className="text-sm text-gray-600">Analyses avec confiance &gt; 80% et sévérité &gt; 70%</p>
           </div>
           
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-dark-quaternary">
-                <tr className="text-left text-sm text-white/75">
+              <thead className="bg-gray-50">
+                <tr className="text-left text-sm text-gray-700">
                   <th className="p-3">Date/Heure</th>
                   <th className="p-3">Statut</th>
                   <th className="p-3">Confiance</th>
@@ -155,27 +155,27 @@ export default function HistoryPage() {
               </thead>
               <tbody>
                 {analyses.length > 0 ? analyses.map((analysis) => (
-                  <tr key={analysis.id} className="border-b border-white/8 hover:bg-dark-quaternary/50">
-                    <td className="p-3 text-sm text-white/95">{formatDate(analysis.timestamp)}</td>
+                  <tr key={analysis.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="p-3 text-sm text-gray-900">{formatDate(analysis.timestamp)}</td>
                     <td className="p-3">
                       <div className="flex items-center gap-2">
                         {getStatusIcon(analysis.status)}
-                        <span className="text-sm text-white/95">{getStatusLabel(analysis.status)}</span>
+                        <span className="text-sm text-gray-900">{getStatusLabel(analysis.status)}</span>
                       </div>
                     </td>
                     <td className="p-3">
-                      <div className="text-sm text-white/95">{Math.round(analysis.confidence * 100)}%</div>
+                      <div className="text-sm text-gray-900">{Math.round(analysis.confidence * 100)}%</div>
                     </td>
                     <td className="p-3">
-                      <div className="text-sm text-white/95">{Math.round(analysis.severity * 100)}%</div>
+                      <div className="text-sm text-gray-900">{Math.round(analysis.severity * 100)}%</div>
                     </td>
-                    <td className="p-3 text-sm text-white/75">{analysis.rms.toFixed(3)}</td>
-                    <td className="p-3 text-sm text-white/75">{analysis.peak.toFixed(3)}</td>
-                    <td className="p-3 text-sm text-white/75">{analysis.frequency.toFixed(1)} Hz</td>
+                    <td className="p-3 text-sm text-gray-700">{analysis.rms.toFixed(3)}</td>
+                    <td className="p-3 text-sm text-gray-700">{analysis.peak.toFixed(3)}</td>
+                    <td className="p-3 text-sm text-gray-700">{analysis.frequency.toFixed(1)} Hz</td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={7} className="p-8 text-center text-white/55">
+                    <td colSpan={7} className="p-8 text-center text-gray-500">
                       Aucune analyse significative trouvée pour cette période
                     </td>
                   </tr>

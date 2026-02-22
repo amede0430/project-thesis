@@ -32,8 +32,8 @@ export default function ActivityFeed({ activities }: ActivityFeedProps) {
 
   return (
     <section>
-      <h2 className="text-lg mb-4 font-semibold text-white/95">Activité Récente</h2>
-      <div className="bg-dark-tertiary p-4 rounded-lg">
+      <h2 className="text-lg mb-4 font-semibold text-gray-900">Activité Récente</h2>
+      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
         <div>
           {activities.map((activity, index) => (
             <div key={activity.id} className={`flex gap-3 ${index < activities.length - 1 ? 'mb-4' : ''}`}>
@@ -41,9 +41,9 @@ export default function ActivityFeed({ activities }: ActivityFeedProps) {
                 {getActivityIcon(activity.type)}
               </div>
               <div className="flex-1">
-                <div className="text-sm text-white/95">{activity.title}</div>
-                <div className="text-xs text-white/75">{activity.description}</div>
-                <div className="text-xs text-white/55">{activity.timestamp}</div>
+                <div className="text-sm text-gray-900">{activity.title}</div>
+                <div className="text-xs text-gray-700">{activity.description}</div>
+                <div className="text-xs text-gray-500">{activity.timestamp}</div>
               </div>
             </div>
           ))}

@@ -13,9 +13,16 @@ export default {
           tertiary: '#2A2F38',
           quaternary: '#31363F',
         },
+        light: {
+          primary: '#FFFFFF',
+          secondary: '#F8F9FA',
+          tertiary: '#F1F3F5',
+          quaternary: '#E9ECEF',
+        },
         aqua: {
           primary: '#2DD4BF',
           secondary: '#5EEAD4',
+          dark: '#14B8A6',
         }
       },
       fontFamily: {

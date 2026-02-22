@@ -48,18 +48,18 @@ export default function AlertsTable({ alerts }: AlertsTableProps) {
   return (
     <section>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-white/95">Alertes Actives Prioritaires</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Alertes Actives Prioritaires</h2>
         <button 
           onClick={() => navigate('/alert/ALT-2024-11-28-0347')}
-          className="hover:text-aqua-primary text-sm flex items-center gap-2 text-aqua-secondary"
+          className="hover:text-aqua-dark text-sm flex items-center gap-2 text-aqua-primary"
         >
           <span>Voir Toutes</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
       
-      <div className="bg-dark-tertiary rounded-lg overflow-hidden">
-        <div className="bg-dark-quaternary text-white/75 p-3 text-xs grid grid-cols-12 gap-3 font-medium">
+      <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+        <div className="bg-gray-50 text-gray-700 p-3 text-xs grid grid-cols-12 gap-3 font-medium">
           <div className="col-span-1">Sév.</div>
           <div className="col-span-2">Capteur</div>
           <div className="col-span-3">Localisation</div>
@@ -70,28 +70,28 @@ export default function AlertsTable({ alerts }: AlertsTableProps) {
 
         <div>
           {alerts.map((alert) => (
-            <div key={alert.id} className="hover:bg-dark-quaternary grid grid-cols-12 items-center gap-3 p-3 border-b border-white/8 last:border-b-0">
+            <div key={alert.id} className="hover:bg-gray-50 grid grid-cols-12 items-center gap-3 p-3 border-b border-gray-100 last:border-b-0">
               <div className="col-span-1">
                 <div className={`w-3 h-3 rounded-full ${getSeverityColor(alert.severity)}`} title={getSeverityText(alert.severity)}></div>
               </div>
               <div className="col-span-2">
-                <div className="text-sm font-medium text-white/95">{alert.sensor_name}</div>
+                <div className="text-sm font-medium text-gray-900">{alert.sensor_name}</div>
               </div>
               <div className="col-span-3">
-                <div className="text-sm text-white/95">Capteur {alert.sensor_name}</div>
-                <div className="text-xs text-white/55">ID: {alert.sensor_id}</div>
+                <div className="text-sm text-gray-900">Capteur {alert.sensor_name}</div>
+                <div className="text-xs text-gray-500">ID: {alert.sensor_id}</div>
               </div>
               <div className="col-span-3">
-                <div className="text-sm text-white/95">{getTypeText(alert.type)}</div>
-                <div className="text-xs text-white/55">{new Date(alert.created_at).toLocaleString('fr-FR')}</div>
+                <div className="text-sm text-gray-900">{getTypeText(alert.type)}</div>
+                <div className="text-xs text-gray-500">{new Date(alert.created_at).toLocaleString('fr-FR')}</div>
               </div>
               <div className="col-span-1">
-                <span className="text-sm font-medium text-white/95">95%</span>
+                <span className="text-sm font-medium text-gray-900">95%</span>
               </div>
               <div className="col-span-2 flex gap-1">
                 <button 
                   onClick={() => navigate(`/alert/ALT-2024-${alert.id}`)}
-                  className={`text-xs flex justify-center items-center gap-1 font-medium rounded-sm px-2 py-1 ${getButtonStyle(alert.severity)}`}
+                  className="text-xs flex justify-center items-center gap-1 font-medium rounded-sm px-2 py-1 bg-aqua-primary text-white hover:bg-aqua-dark"
                 >
                   <span>Gérer</span>
                 </button>
