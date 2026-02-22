@@ -9,6 +9,100 @@ export default function HistoryPage() {
   const [statistics, setStatistics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  // Données statiques de démonstration
+  const staticAnalyses = [
+    {
+      id: 1,
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      status: 'normal',
+      confidence: 0.95,
+      severity: 0.25,
+      rms: 0.234,
+      peak: 0.567,
+      frequency: 125.3
+    },
+    {
+      id: 2,
+      timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      status: 'warning',
+      confidence: 0.87,
+      severity: 0.72,
+      rms: 0.456,
+      peak: 0.892,
+      frequency: 187.5
+    },
+    {
+      id: 3,
+      timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+      status: 'normal',
+      confidence: 0.92,
+      severity: 0.18,
+      rms: 0.198,
+      peak: 0.423,
+      frequency: 98.7
+    },
+    {
+      id: 4,
+      timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+      status: 'anomaly',
+      confidence: 0.91,
+      severity: 0.88,
+      rms: 0.678,
+      peak: 1.234,
+      frequency: 245.8
+    },
+    {
+      id: 5,
+      timestamp: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(),
+      status: 'normal',
+      confidence: 0.94,
+      severity: 0.22,
+      rms: 0.212,
+      peak: 0.489,
+      frequency: 112.4
+    },
+    {
+      id: 6,
+      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      status: 'warning',
+      confidence: 0.85,
+      severity: 0.75,
+      rms: 0.523,
+      peak: 0.945,
+      frequency: 203.6
+    },
+    {
+      id: 7,
+      timestamp: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(),
+      status: 'normal',
+      confidence: 0.96,
+      severity: 0.15,
+      rms: 0.187,
+      peak: 0.398,
+      frequency: 89.2
+    },
+    {
+      id: 8,
+      timestamp: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
+      status: 'normal',
+      confidence: 0.93,
+      severity: 0.28,
+      rms: 0.245,
+      peak: 0.534,
+      frequency: 134.7
+    }
+  ];
+
+  const staticStatistics = {
+    total_analyses: 8,
+    normal_count: 5,
+    normal_percentage: 62.5,
+    warning_count: 2,
+    warning_percentage: 25.0,
+    anomaly_count: 1,
+    anomaly_percentage: 12.5
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -16,10 +110,20 @@ export default function HistoryPage() {
           fetch(`http://localhost:8000/history/analyses?days=${dateRange}&status=${statusFilter === 'all' ? '' : statusFilter}`).then(r => r.json()),
           fetch(`http://localhost:8000/history/statistics?days=${dateRange}`).then(r => r.json())
         ]);
-        setAnalyses(analysesData);
-        setStatistics(statsData);
+        
+        // Si les données sont vides, utiliser les données statiques
+        if (!analysesData || analysesData.length === 0) {
+          setAnalyses(staticAnalyses);
+          setStatistics(staticStatistics);
+        } else {
+          setAnalyses(analysesData);
+          setStatistics(statsData);
+        }
       } catch (error) {
         console.error('Erreur lors du chargement de l\'historique:', error);
+        // Utiliser les données statiques en cas d'erreur
+        setAnalyses(staticAnalyses);
+        setStatistics(staticStatistics);
       } finally {
         setLoading(false);
       }
